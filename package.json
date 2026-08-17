@@ -1,0 +1,11 @@
+{
+  "name": "open-sentence-json-editor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site web simple pour éditer et sauvegarder des fichiers JSON de projet.",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js && node --check editor/script.js"
+  },
+  "license": "SEE LICENSE IN LICENSE"
+}

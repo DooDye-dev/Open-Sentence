@@ -41,17 +41,6 @@ const updatePathPreview = () => {
 
 const parseJson = () => JSON.parse(editor.value);
 
-const downloadFile = ({ filename, content }) => {
-  const blob = new Blob([content], { type: 'application/json;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-
-  link.href = url;
-  link.download = filename;
-  link.click();
-  URL.revokeObjectURL(url);
-};
-
 const loadDraft = () => {
   const { draftKey, path } = getFileInfo();
   const draft = localStorage.getItem(draftKey);
@@ -91,16 +80,35 @@ saveDraftButton.addEventListener('click', () => {
   setStatus(`Brouillon sauvegardé localement pour ${path}.`, 'success');
 });
 
-form.addEventListener('submit', (event) => {
+form.addEventListener('submit', async (event) => {
   event.preventDefault();
 
   try {
-    const formattedJson = JSON.stringify(parseJson(), null, 2);
-    const { filename, path } = getFileInfo();
-    downloadFile({ filename, content: `${formattedJson}\n` });
-    setStatus(`Téléchargement prêt. Place le fichier dans ${path}.`, 'success');
+    const parsedJson = parseJson();
+    const { path } = getFileInfo();
+
+    setStatus(`Sauvegarde de ${path} en cours...`);
+
+    const response = await fetch('/api/projects', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        pseudo: pseudoInput.value,
+        filename: filenameInput.value,
+        content: JSON.stringify(parsedJson),
+      }),
+    });
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || 'La sauvegarde a échoué.');
+    }
+
+    setStatus(`Sauvegardé sur le site : ${result.path}.`, 'success');
   } catch (error) {
-    setStatus(`Téléchargement bloqué : ${error.message}`, 'error');
+    setStatus(`Sauvegarde bloquée : ${error.message}`, 'error');
   }
 });
 
