@@ -12,7 +12,7 @@
     }
 
     body {
-      background: #FAFAF8;
+      background: #ffffff;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       display: flex;
       justify-content: center;
@@ -29,17 +29,16 @@
     }
 
     h1 {
-      font-size: 32px;
+      font-size: 52px;
       font-weight: 700;
       color: #1A1816;
     }
 
     .scene {
-      width: 320px;
+      width: 500px;
       height: 140px;
       perspective: 800px;
       overflow: hidden;
-      border-radius: 10px;
     }
 
     .cylinder {
@@ -47,7 +46,7 @@
       height: 100%;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.8s ease-in-out;
+      transition: transform 0.2s;
     }
 
     .face {
@@ -58,39 +57,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 56px;
+      font-size: 32px;
       font-weight: 700;
       color: white;
       backface-visibility: hidden;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
     }
 
-    .label {
-      font-size: 14px;
-      color: #8B93A3;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .dots {
-      display: flex;
-      gap: 8px;
-    }
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #E5D5CF;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .dot.active {
-      background: #5B8CFF;
-      width: 24px;
-      border-radius: 4px;
-    }
   </style>
 </head>
 <body>
@@ -99,8 +71,6 @@
     <div class="scene">
       <div class="cylinder" id="cylinder"></div>
     </div>
-    <p class="label" id="label">Français</p>
-    <div class="dots" id="dots"></div>
   </div>
 
   <script>
@@ -120,44 +90,43 @@
     const radius = Math.round((width / 2) / Math.tan(Math.PI / n));
 
     const cylinder = document.getElementById("cylinder");
-    const label = document.getElementById("label");
-    const dotsContainer = document.getElementById("dots");
 
     // Créer les 5 faces, chacune positionnée autour du cylindre
     data.forEach((item, i) => {
       const face = document.createElement("div");
       face.className = "face";
       face.textContent = item.text;
-      face.style.backgroundColor = item.color;
+      face.style.backgroundColor = "#ffffff";
+      face.style.color = item.color;
       face.style.transform = `rotateX(${i * angleStep}deg) translateZ(${radius}px)`;
       cylinder.appendChild(face);
     });
 
-    // Créer les dots
-    data.forEach((_, i) => {
-      const dot = document.createElement("span");
-      dot.className = i === 0 ? "dot active" : "dot";
-      dot.onclick = () => goTo(i);
-      dotsContainer.appendChild(dot);
-    });
-
-    let index = 0;
+    index = 0;
 
     function goTo(i) {
       index = i;
-      // On tourne le cylindre pour amener la face i face à nous
-      cylinder.style.transform = `rotateX(${-i * angleStep}deg)`;
-      label.textContent = data[i].lang;
-      document.querySelectorAll(".dot").forEach((d, di) => {
-        d.classList.toggle("active", di === i);
-      });
+      const displayIndex = index % n;
+
+      cylinder.style.transform = `rotateX(${-index * angleStep}deg)`;
     }
 
-    setInterval(() => {
-      goTo((index + 1) % n);
-    }, 2000);
+    let turns = 0;
 
-    goTo(0);
+    const loop = setInterval(() => {
+      goTo(index + 1);
+
+      if (index % n === 0 && index !== 0) {
+        turns++;
+      }
+
+      if (turns === 3) {
+        const displayIndex = index % n;
+        cylinder.children[displayIndex].textContent = "Why not ? Free & Open Source";
+        clearInterval(loop);
+      }
+    }, 200);
+
   </script>
 </body>
 </html>

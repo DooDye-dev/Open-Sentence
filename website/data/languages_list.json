@@ -1,0 +1,8 @@
+[
+    { "text": "Bonjour", "lang": "Français", "color": "#5B8CFF" },
+    { "text": "Hello", "lang": "English", "color": "#37C9A1" },
+    { "text": "Hola", "lang": "Español", "color": "#FF9500" },
+    { "text": "Hallo", "lang": "Deutsch", "color": "#E5566D" },
+    { "text": "Ciao", "lang": "Italiano", "color": "#8B5CF6" },
+    { "text": "早上好", "lang": "Chinese", "color": "#7B0B87" }
+]
