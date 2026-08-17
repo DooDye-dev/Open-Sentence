@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Éditeur JSON</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero" aria-labelledby="title">
+        <p class="eyebrow">Open Sentence</p>
+        <h1 id="title">Éditeur JSON</h1>
+        <p>
+          Crée un fichier JSON pour un projet. Le chemin cible affiché suit le format
+          <code>/projects/pseudo/nomdujson.json</code>.
+        </p>
+      </section>
+
+      <form id="editor-form" class="panel">
+        <div class="field-grid">
+          <label>
+            Pseudo
+            <input id="pseudo" name="pseudo" autocomplete="nickname" placeholder="ex: alice" required />
+          </label>
+
+          <label>
+            Nom du JSON
+            <input id="filename" name="filename" placeholder="ex: scene-01" required />
+          </label>
+        </div>
+
+        <label class="editor-label" for="json-editor">Contenu JSON</label>
+        <textarea id="json-editor" spellcheck="false" aria-describedby="status">{
+  "titre": "Mon fichier",
+  "phrases": []
+}</textarea>
+
+        <div class="path-preview" aria-live="polite">
+          Chemin cible : <strong id="target-path">/projects/pseudo/nomdujson.json</strong>
+        </div>
+
+        <p id="status" class="status" role="status">Prêt à éditer.</p>
+
+        <div class="actions">
+          <button type="button" id="format-json">Formatter</button>
+          <button type="button" id="save-draft">Sauvegarder le brouillon</button>
+          <button type="submit" class="primary">Télécharger le JSON</button>
+        </div>
+      </form>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
